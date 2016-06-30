@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
 
-  get '/',          to: 'webmap#new'
-  post 'webmap',    to: 'webmap#create'
+  get '/',          to: 'sitemaps#new'
+  post 'sitemap',    to: 'sitemaps#create'
 end
