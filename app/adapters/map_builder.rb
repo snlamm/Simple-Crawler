@@ -21,8 +21,16 @@ class MapBuilder
     # get static urls (img, video, etc.)
   end
 
+  #get raw page html
   def get_html
-    @html = Nokogiri::HTML(open(@link))
+    @html = Nokogiri::HTML(open(@link.url))
   end
+
+  #use regex to take the link url and capture anything after the final / in the root domain name. Set that as the page name.
+  def get_page_name
+    page_name = @link.url.match(/\/\/\w*\.\w*\/(.*)/)[1]
+    page_name.empty? ? @page_name = "root" : @page_name = page_name
+  end
+
 
 end
