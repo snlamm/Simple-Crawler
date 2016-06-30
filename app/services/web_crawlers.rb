@@ -20,7 +20,7 @@ class WebCrawlers
   end
 
   def find_uncrawled
-    #find first uncrawled link
+    all_links.detect {|link| link.not_crawled}
   end
 
   def extract_link_map(next_link)
