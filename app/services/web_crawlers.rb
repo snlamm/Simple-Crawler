@@ -32,7 +32,7 @@ class WebCrawlers
 # this method calls on the MapBuilder object (see app/adapters/map_builder.rb), which scrapes the web page and formats the data. The object returns a hash/array mix with keys such as :links, :images, and :videos and values of the data, in array form, associated with each key. Mapbuilder will be run for each page that is crawled.
   def extract_link_map(next_link)
     webpage = MapBuilder.new(next_link)
-    update_webcrawler(webpage)
+    update_webcrawler(webpage) unless webpage == :error
   end
 
 # this method updates the sitemap with the data returned by MapBuiler

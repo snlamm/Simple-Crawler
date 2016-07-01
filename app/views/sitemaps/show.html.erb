@@ -2,18 +2,18 @@
 
 <!-- this template iterates through each page contained in the @crawled_site object and shows three sections (links, images, and iframes). Each of these sections is rendered using the same data_iterate partial found in app/views/sitemaps, which means it would be easy to add more sections.  -->
 <% @crawled_site.sitemap.each do |page| %>
+  <% unless (page.nil? || page.first.nil?) %>
+    <h2 class="toggle-option" id=<%= page.first.gsub(/[^0-9a-z ]/i, '') %>><%= page.first %></h2>
 
-  <h2 class="toggle-option" id=<%= page.first[1..-1] %>><%= page.first %></h2>
+    <div class="data-info <%= page.first.gsub(/[^0-9a-z ]/i, '') %>" >
+      <h4> -- Page Links</h4>
+      <%= render partial: "data_iterate", locals: { payload: page[1][:page_links]} %>
 
-  <div class="data-info <%= page.first[1..-1] %>" >
-    <h4> -- Page Links</h4>
-    <%= render partial: "data_iterate", locals: { payload: page[1][:page_links]} %>
+      <h4>-- Images</h4>
+      <%= render partial: "data_iterate", locals: { payload: page[1][:images]} %>
 
-    <h4>-- Images</h4>
-    <%= render partial: "data_iterate", locals: { payload: page[1][:images]} %>
-
-    <h4>-- Iframes</h4>
-    <%= render partial: "data_iterate", locals: { payload: page[1][:iframes]} %>
-  </div>
-
+      <h4>-- Iframes</h4>
+      <%= render partial: "data_iterate", locals: { payload: page[1][:iframes]} %>
+    </div>
+  <% end %>
 <% end %>
