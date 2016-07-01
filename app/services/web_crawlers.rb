@@ -1,10 +1,10 @@
 class WebCrawlers
-  attr_accessor :domain_root
+  attr_accessor :domain_root, :sitemap, :all_links
   def initialize(domain)
     @domain_root = Link.new(domain)
-    @webmap = {}
+    @sitemap = {}
     @all_links = []
-    @ll_links << @domain_root
+    @all_links << @domain_root
     recursive_build
   end
 
@@ -20,12 +20,28 @@ class WebCrawlers
   end
 
   def find_uncrawled
-    all_links.detect {|link| link.not_crawled}
+    @all_links.detect {|link| link.not_crawled}
   end
 
   def extract_link_map(next_link)
-    #make a mapbuilder
-    #update webcrawler class with mapbuilder info
+    webpage = MapBuilder.new(next_link)
+    update_webcrawler(webpage)
+  end
+
+  def update_webcrawler(webpage)
+    name = webpage.page_name
+    map = webpage.page_map
+    @sitemap[name] = map
+    check_for_new_links(webpage.domain_links)
+  end
+
+  def check_for_new_links(domain_links)
+    current_links = @all_links.map {|link| link.url}
+    links_to_add = domain_links - current_links
+    links_to_add.map do |link|
+      add_link = Link.new(link)
+      @all_links << add_link
+    end
   end
 
 end
