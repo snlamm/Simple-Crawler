@@ -1,7 +1,5 @@
 This web crawler, built in Rails, works by taking the input of a web domain and then showing a simple sitemap that consists of links to other pages within the same domain, links to external pages, and links to static content such as images and iframes.
 
-Please find the video demo here: https://www.youtube.com/watch?v=OQq6QJ-acKE&feature=youtu.be
-
 The crawler works by setting up a route in config/routes.rb, which maps to a controller action in app/controllers/sitemaps_controller.rb.
 
 sitemaps_controller is responsible for retrieving the web crawler data and rendering it in app/views/sitemaps/show.html.erb.
