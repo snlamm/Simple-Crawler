@@ -18,11 +18,17 @@ class MapBuilder
 
 # called on initialization, build_map is the runner for the rest of the instance methods in this object. It is easily expanded. To add the text of all <p> elements to the sitemap, for example, I'd merely add a get_paragraphs method. The final result is that MapBuilder will have all the data we want from the page in its @page_map variable, which will then be accessible to the main WebCrawler object in app/services/web_crawlers.rb
   def build_map
-    get_html
-    get_page_name
-    get_images
-    get_iframes
-    get_page_links
+    begin
+      get_html
+    rescue
+      :error
+      @link.not_crawled = false
+    else
+      get_page_name
+      get_images
+      get_iframes
+      get_page_links
+    end
   end
 
   #get page's raw html
@@ -76,12 +82,16 @@ class MapBuilder
         full_url = "http://wiprodigital.com" + url
         @domain_links << full_url
         full_url
+      elsif url.match(/http\:\/\/wiprodigital.com/)
+        @domain_links << url
+        url
       elsif url[0] == "#"
         nil
       else
         url
       end
     end
+    @domain_links.uniq!
     @page_map[:page_links] = urls.compact.uniq
   end
 
