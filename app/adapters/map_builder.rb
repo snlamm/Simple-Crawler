@@ -5,18 +5,21 @@ class MapBuilder
 
 
 
-  attr_accessor :link, :page_map, :page_name, :html
+  attr_accessor :link, :page_map, :page_name, :domain_links, :html
   def initialize(link)
     @link = link
     @page_map = {}
     @page_name
+    @domain_links = []
     @html
   end
 
 
   def build_map
     get_html
-    # get page name
+    get_page_name
+    get_images
+    get_iframes
     # get page links
     # get static urls (img, video, etc.)
   end
@@ -34,7 +37,6 @@ class MapBuilder
   end
 
   def get_static_urls
-    binding.pry
     get_images
     get_iframes
   end
@@ -46,9 +48,20 @@ class MapBuilder
   end
 
   def get_iframes
-    iframes = @html.css('iframe')
+    iframe_tags = @html.css('iframe')
     src_urls = iframe_tags.map {|iframe| iframe.attribute('src').value}
     @page_map[:iframes] = src_urls
+  end
+
+  def get_page_links
+    a_tags = @html.css('a')
+    href_urls = a_tags.map do |a_tag|
+      if a_tag.attribute('href')
+        value = a_tag.attribute('href').value
+        value if value != "#"
+      end
+    end
+    href_urls.compact
   end
 
 end
