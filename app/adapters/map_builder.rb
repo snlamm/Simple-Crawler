@@ -1,3 +1,6 @@
+# MapBuilder uses nokogiri and open-uri to get the data our app needs from each web page. Nokogiri is used for web scraping, while open-uri allows us to easily make http requests through the 'open' method.
+# Once the html from a page is obtained, MapBuilder stores the page name to use as a title (ex. 'wiprodigital.com/about' becomes 'about'), and creates a page map (@page_map) with the links, images, and iframes on the page. The methods that obtain each of these elements are simple and @page_map is easily expanded, which means we can easily add more categories to the map.
+
 require 'nokogiri'
 require 'open-uri'
 
@@ -13,6 +16,7 @@ class MapBuilder
     build_map
   end
 
+# called on initialization, build_map is the runner for the rest of the instance methods in this object. It is easily expanded. To add the text of all <p> elements to the sitemap, for example, I'd merely add a get_paragraphs method. The final result is that MapBuilder will have all the data we want from the page in its @page_map variable, which will then be accessible to the main WebCrawler object in app/services/web_crawlers.rb
   def build_map
     get_html
     get_page_name
@@ -21,18 +25,19 @@ class MapBuilder
     get_page_links
   end
 
-  #get raw page html
+  #get page's raw html
   def get_html
     @html = Nokogiri::HTML(open(@link.url))
     @link.not_crawled = false
   end
 
-  #use regex to take the link url and capture anything after the final / in the root domain name. Set that as the page name.
+  #use regex to take the page's and capture anything after the final / in the root domain name. That capture group is then set as the @page_name. Thus, wiprodigital.com/about becomes 'about'
   def get_page_name
     page_name = @link.url.match(/\/\/\w*\.\w*\/(.*)/)[1]
     page_name.empty? ? @page_name = "root" : @page_name = page_name
   end
 
+#adds images and iframes to @page_map
   def get_static_urls
     get_images
     get_iframes
@@ -50,6 +55,7 @@ class MapBuilder
     @page_map[:iframes] = src_urls
   end
 
+# this method goes through every <a> tag and discounts any that do not have an href. It then passes the remaining urls to handle_page_links for formatting.
   def get_page_links
     a_tags = @html.css('a')
     href_urls = a_tags.map do |a_tag|
@@ -62,6 +68,7 @@ class MapBuilder
     handle_page_links(href_urls)
   end
 
+# formats page links when necessary by adding the domain if the link is for wipro or deleting the link if it is merely a redirect to a different part of the same page. The links are then added to @page_map
   def handle_page_links(urls)
     external_links = []
     urls.map! do |url|
@@ -75,7 +82,7 @@ class MapBuilder
         url
       end
     end
-    @page_map[:page_links] = urls.compact
+    @page_map[:page_links] = urls.compact.uniq
   end
 
 end
