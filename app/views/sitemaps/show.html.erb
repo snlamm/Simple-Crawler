@@ -2,20 +2,15 @@
 
 
 <% @crawled_site.sitemap.each do |page| %>
-  <h2><%= page.first %></h2>
+  <h2 class="toggle-option" id=<%= page.first[1..-1] %>><%= page.first %></h2>
+  <div class="data-info <%= page.first[1..-1] %>" >
+    <h4> -- Page Links</h4>
+    <%= render partial: "data_iterate", locals: { payload: page[1][:page_links]} %>
 
-  <br>
+    <h4>-- Images</h4>
+    <%= render partial: "data_iterate", locals: { payload: page[1][:images]} %>
 
-  <h4 class="toggle-option">Page Links</h4>
-  <%= render partial: "data_iterate", locals: { payload: page[1][:page_links]} %>
-
-  <br>
-
-  <h4 class="toggle-option">Images</h4>
-  <%= render partial: "data_iterate", locals: { payload: page[1][:images]} %>
-
-  <br class="toggle-option">
-
-  <h4>Iframes</h4>
-  <%= render partial: "data_iterate", locals: { payload: page[1][:iframes]} %>
+    <h4>-- Iframes</h4>
+    <%= render partial: "data_iterate", locals: { payload: page[1][:iframes]} %>
+  </div>
 <% end %>
