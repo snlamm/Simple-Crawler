@@ -1,6 +1,6 @@
 <h1>Site Map for <%= @crawled_site.domain_root.url %></h1>
 
-<!-- this template iterates through each page contained in the @crawled_site object and shows three sections (links, images, and iframes). Each of these sections is rendered using the same data_iterate partial found in app/views/sitemaps, which means it would be easy to add more sections.  -->
+<!-- this template iterates through each page contained in the @crawled_site object and shows three sections (links, images, and iframes). Each of these sections is rendered using the same data_iterate partial found in app/views/sitemaps, which means it would be easy to add more sections. Simple javascript can be found in app/assets/javascripts/sitemaps_show.js, which is used to create a toggle effect to show/hide the data for each page. -->
 <% @crawled_site.sitemap.each do |page| %>
   <% unless (page.nil? || page.first.nil?) %>
     <h2 class="toggle-option" id=<%= page.first.gsub(/[^0-9a-z ]/i, '') %>><%= page.first %></h2>
