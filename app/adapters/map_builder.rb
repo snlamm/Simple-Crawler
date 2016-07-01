@@ -6,17 +6,18 @@ require 'open-uri'
 
 class MapBuilder
 
-  attr_accessor :link, :page_map, :page_name, :domain_links, :html
-  def initialize(link)
+  attr_accessor :link, :page_map, :page_name, :domain_links, :html, :root
+  def initialize(link, root)
     @link = link
     @page_map = {}
     @page_name
     @domain_links = []
     @html
+    @root = root
     build_map
   end
 
-# called on initialization, build_map is the runner for the rest of the instance methods in this object. It is easily expanded. To add the text of all <p> elements to the sitemap, for example, I'd merely add a get_paragraphs method. The final result is that MapBuilder will have all the data we want from the page in its @page_map variable, which will then be accessible to the main WebCrawler object in app/services/web_crawlers.rb. The begin/rescue method is used to avoid links that are broken or cannot be crawled, such as pdfs. 
+# called on initialization, build_map is the runner for the rest of the instance methods in this object. It is easily expanded. To add the text of all <p> elements to the sitemap, for example, I'd merely add a get_paragraphs method. The final result is that MapBuilder will have all the data we want from the page in its @page_map variable, which will then be accessible to the main WebCrawler object in app/services/web_crawlers.rb. The begin/rescue method is used to avoid links that are broken or cannot be crawled, such as pdfs.
   def build_map
     begin
       get_html
@@ -79,10 +80,10 @@ class MapBuilder
     external_links = []
     urls.map! do |url|
       if url[0] == "/"
-        full_url = "http://wiprodigital.com" + url
+        full_url = @root + url
         @domain_links << full_url
         full_url
-      elsif url.match(/http\:\/\/wiprodigital.com/)
+      elsif url.include?(@root)
         @domain_links << url
         url
       elsif url[0] == "#"
