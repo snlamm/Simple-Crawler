@@ -1,28 +1,19 @@
-== README
+This web crawler, built in Rails, works by taking the input of a web domain and then showing a simple sitemap that consists of links to other pages within the same domain, links to external pages, and links to static content such as images and iframes.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The crawler works by setting up a route in config/routes.rb, which maps to a controller action in app/controllers/sitemaps_controller.rb.
 
-Things you may want to cover:
+sitemaps_controller is responsible for retrieving the web crawler data and rendering it in app/views/sitemaps/show.html.erb.
 
-* Ruby version
+The controller retrieves the appropriate data by calling upon the WebCrawlers class, which itself relies on the Link class and MapBuilder class.
 
-* System dependencies
+The WebCrawlers class, housed in app/services/web_crawlers.rb, is in charge of storing the continuously growing site map data and keeping track of which pages have been visited.
 
-* Configuration
+The Link and MapBuilder classes are used within the WebCrawlers class to help simplify and accomplish these goals.
 
-* Database creation
+The Link class, at app/services/link.rb, stores the urls of each page in the web site and tracks which ones need to be visited or have been visited already.
 
-* Database initialization
+The MapBuilder class, at app/adapters/map_builder.rb, is in charge of extracting and storing the desired data from each individual web page. This data is what is added to the WebCrawlers class's overall site map data. It is this site map data that, coming full circle, is eventually returned in the controller and rendered in the view template.
 
-* How to run the test suite
+Each file mentioned has additional notes that go into more detail on a method-by-method basis.
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Run this app by forking it, running rails s in the console, and navigating to http://localhost:3000/sitemap.

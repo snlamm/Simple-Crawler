@@ -1,8 +1,5 @@
 Rails.application.routes.draw do
 
-  get '/',          to: 'sitemaps#new'
-  post 'sitemap',   to: 'sitemaps#create'
-
-  #temporary route for testing purposes
+  #the route to sitemaps controller's create action
   get 'sitemap',  to: 'sitemaps#create'
 end
