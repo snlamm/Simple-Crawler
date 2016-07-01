@@ -3,8 +3,6 @@ require 'open-uri'
 
 class MapBuilder
 
-
-
   attr_accessor :link, :page_map, :page_name, :domain_links, :html
   def initialize(link)
     @link = link
@@ -14,14 +12,12 @@ class MapBuilder
     @html
   end
 
-
   def build_map
     get_html
     get_page_name
     get_images
     get_iframes
-    # get page links
-    # get static urls (img, video, etc.)
+    get_page_links
   end
 
   #get raw page html
@@ -61,7 +57,24 @@ class MapBuilder
         value if value != "#"
       end
     end
-    href_urls.compact
+    href_urls.compact!
+    handle_page_links(href_urls)
+  end
+
+  def handle_page_links(urls)
+    external_links = []
+    urls.map! do |url|
+      if url[0] == "/"
+        full_url = "http://wiprodigital.com" + url
+        @domain_links << full_url
+        full_url
+      elsif url[0] == "#"
+        nil
+      else
+        url
+      end
+    end
+    @page_map[:page_links] = urls.compact
   end
 
 end
