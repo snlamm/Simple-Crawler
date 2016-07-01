@@ -10,6 +10,7 @@ class MapBuilder
     @page_name
     @domain_links = []
     @html
+    build_map
   end
 
   def build_map
