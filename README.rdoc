@@ -1,5 +1,9 @@
 This web crawler, built in Rails, works by taking the input of a web domain. It then renders a simple sitemap that consists of links to other pages within the same domain, links to external pages, and links to static content such as images and iframes.
 
+A video demo of the rendered output can be found at: https://www.youtube.com/watch?v=dmJk62AbLfo&feature=youtu.be
+
+Run this app by forking it, running rails s in the console, and navigating to http://localhost:3000/sitemap.
+
 The crawler works by setting up a route in config/routes.rb, which maps to a controller action in app/controllers/sitemaps_controller.rb.
 
 sitemaps_controller is responsible for retrieving the web crawler data and rendering it in app/views/sitemaps/show.html.erb.
@@ -16,6 +20,4 @@ The MapBuilder class, at app/adapters/map_builder.rb, is in charge of extracting
 
 Each file mentioned has additional notes that go into more detail on a method-by-method basis.
 
-Run this app by forking it, running rails s in the console, and navigating to http://localhost:3000/sitemap.
-
-Though Rails worked well for this project, it comes with a lot of bells and whistles that were unnecessary and cluttered the working space. As a result, I decided to delete a number of directories and files that come from generating a new Rails app. On the other hand, Rails grants a lot of flexibility in terms of adding new features, such as saving my scraping results to a database and manipulating them for further use. 
+Though Rails worked well for this project, it comes with a lot of bells and whistles that were unnecessary and cluttered the working space. As a result, I decided to delete a number of directories and files that come from generating a new Rails app. On the other hand, Rails grants a lot of flexibility in terms of adding new features, such as saving my scraping results to a database and manipulating them for further use.

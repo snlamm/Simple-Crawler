@@ -16,7 +16,7 @@ class MapBuilder
     build_map
   end
 
-# called on initialization, build_map is the runner for the rest of the instance methods in this object. It is easily expanded. To add the text of all <p> elements to the sitemap, for example, I'd merely add a get_paragraphs method. The final result is that MapBuilder will have all the data we want from the page in its @page_map variable, which will then be accessible to the main WebCrawler object in app/services/web_crawlers.rb
+# called on initialization, build_map is the runner for the rest of the instance methods in this object. It is easily expanded. To add the text of all <p> elements to the sitemap, for example, I'd merely add a get_paragraphs method. The final result is that MapBuilder will have all the data we want from the page in its @page_map variable, which will then be accessible to the main WebCrawler object in app/services/web_crawlers.rb. The begin/rescue method is used to avoid links that are broken or cannot be crawled, such as pdfs. 
   def build_map
     begin
       get_html
