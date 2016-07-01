@@ -16,6 +16,7 @@ class WebCrawlers
 
   #the recursive_build method, called on creation of the webcrawler object, uses recursion to visit every page of the website. It starts with the root url (added on initialization to @all_links). When a page is visted, the wipro links on that page are added to @all_links and the @sitemap is updated with the page's data.
   # Once a page is visited, the boolean value of its Link object is changed so that the page will not revisited (see find_uncrawled below). The recursion ends once there are no more links left with the proper boolean value.
+  # one tradeoff with using this method is that all the pages are scraped in one big process, which is relatively slow. Another way of doing this might be, for example, to implement lazy loading.
   def recursive_build
     next_link = find_uncrawled
     return unless next_link
@@ -42,7 +43,7 @@ class WebCrawlers
     check_for_new_links(webpage.domain_links)
   end
 
-# this method seaches through all the links returned by MapBuilder that are associated with wipro and checks each one to see if it is in @all_links. If not, then a new Link object is created with that link as its @url, and the Link object is added to @all_links to be crawled. 
+# this method seaches through all the links returned by MapBuilder that are associated with wipro and checks each one to see if it is in @all_links. If not, then a new Link object is created with that link as its @url, and the Link object is added to @all_links to be crawled.
   def check_for_new_links(domain_links)
     current_links = @all_links.map {|link| link.url}
     links_to_add = domain_links - current_links
