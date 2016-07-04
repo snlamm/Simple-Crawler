@@ -40,7 +40,7 @@ class MapBuilder
 
   #use regex to take the page's and capture anything after the final / in the root domain name. That capture group is then set as the @page_name. Thus, wiprodigital.com/about becomes 'about'
   def get_page_name
-    page_name = @link.url.match(/\/\/\w*\.\w*\/(.*)/)[1]
+    page_name = @link.url.match(/\/\/[^\/]*\/(.*)/)[1]
     page_name.empty? ? @page_name = "root" : @page_name = page_name
   end
 
